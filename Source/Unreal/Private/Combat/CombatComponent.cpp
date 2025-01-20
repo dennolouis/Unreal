@@ -51,7 +51,7 @@ void UCombatComponent::ComboAttack()
 
 	bCanAttack = false;
 
-	CharacterRef->PlayAnimMontage(AttackAnimations[ComboCounter]);
+	float AttackAnimDuration = CharacterRef->PlayAnimMontage(AttackAnimations[ComboCounter]);
 
 	ComboCounter++;
 
@@ -78,5 +78,24 @@ void UCombatComponent::RandomAttack()
 	};
 
 	AnimDuration = CharacterRef->PlayAnimMontage(AttackAnimations[RandomIndex]);
+}
+
+void UCombatComponent::ResetComboCounter()
+{
+	ComboCounter = 0;
+}
+
+bool UCombatComponent::IsAttacking() const
+{
+	return !bCanAttack;
+}
+
+void UCombatComponent::StopAttackAnimation()
+{
+	if (CharacterRef) 
+	{ 
+		CharacterRef->StopAnimMontage(); 
+		bCanAttack = true; 
+	}
 }
 

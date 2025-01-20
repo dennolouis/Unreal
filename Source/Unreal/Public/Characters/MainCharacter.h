@@ -70,4 +70,7 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void PlayHurtAnim(TSubclassOf<class UCameraShakeBase> CameraShakeTemplate);
 
+	UFUNCTION(BlueprintCallable)
+	void CustomJump();
+
 };

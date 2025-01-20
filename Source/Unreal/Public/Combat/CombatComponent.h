@@ -55,8 +55,14 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HandleResetAttack();
 
-	UFUNCTION()
-	void RandomAttack();
+	UFUNCTION(BlueprintCallable)
+	void ResetComboCounter();
 
-		
+	UFUNCTION(BlueprintPure)
+	bool IsAttacking() const;
+
+	void StopAttackAnimation();
+
+	UFUNCTION()
+	void RandomAttack();		
 };

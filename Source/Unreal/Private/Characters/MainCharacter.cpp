@@ -96,3 +96,13 @@ void AMainCharacter::PlayHurtAnim(TSubclassOf<class UCameraShakeBase> CameraShak
 	}
 }
 
+void AMainCharacter::CustomJump()
+{
+	if (CombatComp && CombatComp->IsAttacking())
+	{
+		CombatComp->StopAttackAnimation();
+	}
+
+	Super::Jump();
+}
+
