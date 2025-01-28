@@ -41,6 +41,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	class UPlayerActtionsComponent* PlayerActionsComp;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Components")
+	class UChildActorComponent* Sword;
+
 
 protected:
 	// Called when the game starts or when spawned

@@ -24,6 +24,9 @@ AMainCharacter::AMainCharacter()
 	TraceComp = CreateDefaultSubobject<UTraceComponent>(TEXT("Trace Component"));
 	BlockComp = CreateDefaultSubobject<UBlockComponent>(TEXT("Block Component"));
 	PlayerActionsComp = CreateDefaultSubobject<UPlayerActtionsComponent>(TEXT("Player Actions Component"));
+	
+	Sword = CreateDefaultSubobject<UChildActorComponent>(TEXT("Sword"));
+	Sword->SetupAttachment(GetMesh(), TEXT("SwordSocket"));
 }
 
 // Called when the game starts or when spawned
