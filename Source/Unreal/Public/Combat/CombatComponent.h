@@ -19,15 +19,18 @@ class UNREAL_API UCombatComponent : public UActorComponent
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere)
-	TArray<UAnimMontage*> LightAttackAnimations;
+	TArray<UAnimMontage*> AttackAnimations;
 
 	UPROPERTY(EditAnywhere)
-	TArray<UAnimMontage*> HeavyAttackAnimations;
+	UAnimMontage* StandingHeavyAttackAnimation;
+
+	UPROPERTY(EditAnywhere)
+	UAnimMontage* MovingHeavyAttackAnimation;
 
 	ACharacter* CharacterRef;
 
 	UPROPERTY(VisibleAnywhere)
-	int LightComboCounter{ 0 };
+	int ComboCounter{ 0 };
 
 	UPROPERTY(VisibleAnywhere)
 	int HeavyComboCounter{ 0 };
@@ -59,7 +62,10 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	void ComboAttack(bool isLightAttack = true);
+	void ComboAttack();
+
+	UFUNCTION(BlueprintCallable)
+	void HeavyAttack();
 
 	UFUNCTION(BlueprintCallable)
 	void HandleResetAttack();

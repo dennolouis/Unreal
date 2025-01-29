@@ -35,37 +35,64 @@ void UCombatComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	// ...
 }
 
-void UCombatComponent::ComboAttack(bool isLightAttack)
+void UCombatComponent::ComboAttack()
 {
-    if (CharacterRef->Implements<UMainplayer>())
-    {
-        IMainplayer* IPlayerRef{ Cast<IMainplayer>(CharacterRef) };
+	if (CharacterRef->Implements<UMainplayer>())
+	{
+		IMainplayer* IPlayerRef{ Cast<IMainplayer>(CharacterRef) };
 
-        if (IPlayerRef && !IPlayerRef->HasEnoughStamina(isLightAttack ? StaminaCost : HeavyStaminaCost))
-        {
-            return;
-        }
-    }
+		if (IPlayerRef && !IPlayerRef->HasEnoughStamina(StaminaCost))
+		{
+			return;
+		}
+	}
 
-    if (!bCanAttack) { return; }
+	if (!bCanAttack) { return; }
 
-    bCanAttack = false;
+	bCanAttack = false;
 
-    float AttackAnimDuration = CharacterRef->PlayAnimMontage(
-        isLightAttack ? LightAttackAnimations[LightComboCounter] : HeavyAttackAnimations[HeavyComboCounter]
-    );
+	float AttackAnimDuration = CharacterRef->PlayAnimMontage(AttackAnimations[ComboCounter]);
 
-    // Increment and wrap the combo counter
-    if (isLightAttack)
-    {
-        LightComboCounter = (LightComboCounter + 1) % LightAttackAnimations.Num();
-    }
-    else
-    {
-        HeavyComboCounter = (HeavyComboCounter + 1) % HeavyAttackAnimations.Num();
-    }
+	ComboCounter++;
 
-    OnAttackPerformedDelegate.Broadcast(StaminaCost);
+	int MaxCombo{ AttackAnimations.Num() };
+
+	ComboCounter = UKismetMathLibrary::Wrap(
+		ComboCounter,
+		-1,
+		(MaxCombo - 1)
+	); //can just use mod (%) instead
+
+	OnAttackPerformedDelegate.Broadcast(StaminaCost);
+}
+
+void UCombatComponent::HeavyAttack()
+{
+	if (CharacterRef->Implements<UMainplayer>())
+	{
+		IMainplayer* IPlayerRef{ Cast<IMainplayer>(CharacterRef) };
+
+		// Check if the player has enough stamina for a heavy attack
+		if (IPlayerRef && !IPlayerRef->HasEnoughStamina(HeavyStaminaCost))
+		{
+			return;
+		}
+	}
+
+	if (!bCanAttack) { return; }
+
+	bCanAttack = false;
+
+	// Determine if the player is moving or standing still
+	FVector Velocity = CharacterRef->GetVelocity();
+	bool bIsMoving = !Velocity.IsNearlyZero();
+
+	// Play the appropriate animation based on movement state
+	UAnimMontage* SelectedAnimation = bIsMoving ? MovingHeavyAttackAnimation : StandingHeavyAttackAnimation;
+	float AttackAnimDuration = CharacterRef->PlayAnimMontage(SelectedAnimation);
+
+	// Broadcast the attack event and deduct stamina
+	OnAttackPerformedDelegate.Broadcast(HeavyStaminaCost);
 }
 
 
@@ -77,15 +104,15 @@ void UCombatComponent::HandleResetAttack()
 void UCombatComponent::RandomAttack()
 {
 	int RandomIndex{
-		FMath::RandRange(0, LightAttackAnimations.Num() - 1)
+		FMath::RandRange(0, AttackAnimations.Num() - 1)
 	};
 
-	AnimDuration = CharacterRef->PlayAnimMontage(LightAttackAnimations[RandomIndex]);
+	AnimDuration = CharacterRef->PlayAnimMontage(AttackAnimations[RandomIndex]);
 }
 
 void UCombatComponent::ResetComboCounter()
 {
-	LightComboCounter = 0;
+	ComboCounter = 0;
 	HeavyComboCounter = 0;
 }
 
