@@ -80,7 +80,7 @@ bool AMainCharacter::CanTakeDamage(AActor* Opponent)
 {
 	if (PlayerActionsComp->bIsRollActive) { return false; }
 
-	if (PlayerAnim->bIsBlocking)
+	if (PlayerAnim && PlayerAnim->bIsBlocking)
 	{
 		return BlockComp->Check(Opponent);
 	}
