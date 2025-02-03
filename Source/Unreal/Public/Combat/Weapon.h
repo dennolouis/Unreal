@@ -21,7 +21,7 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
     UStaticMeshComponent* WeaponMesh;
 
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
     UBoxComponent* WeaponHitbox;
 
     UPROPERTY(BlueprintReadWrite, EditAnywhere)
