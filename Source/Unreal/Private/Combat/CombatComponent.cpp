@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "Kismet/KismetMathLibrary.h"
 #include "Interfaces/Mainplayer.h"
+#include <Combat/LockOnComponent.h>
 
 // Sets default values for this component's properties
 UCombatComponent::UCombatComponent()
@@ -48,6 +49,15 @@ void UCombatComponent::ComboAttack()
 	}
 
 	if (!bCanAttack) { return; }
+
+	ULockOnComponent* LockOnComp = CharacterRef->FindComponentByClass<ULockOnComponent>();
+	if (LockOnComp && LockOnComp->GetCurrentTargetActor())
+	{
+		AActor* TargetActor = LockOnComp->GetCurrentTargetActor();
+		FRotator LookAtRotation = (TargetActor->GetActorLocation() - CharacterRef->GetActorLocation()).Rotation();
+		LookAtRotation.Pitch = 0.0f; // Keep rotation horizontal
+		CharacterRef->SetActorRotation(LookAtRotation);
+	}
 
 	bCanAttack = false;
 

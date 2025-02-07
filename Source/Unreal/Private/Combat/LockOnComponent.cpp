@@ -59,7 +59,7 @@ void ULockOnComponent::StartLockOn(float Radius)
 	CurrentTargetActor = OutResult.GetActor();
 
 	Controller->SetIgnoreLookInput(true);
-	MovementComp->bOrientRotationToMovement = false;
+	//MovementComp->bOrientRotationToMovement = false;
 	MovementComp->bUseControllerDesiredRotation = true;
 
 	SpringArmComp->TargetOffset = FVector{ 0.0, 0.0, 100.0 };

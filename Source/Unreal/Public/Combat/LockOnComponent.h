@@ -55,4 +55,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void EndLockOn();
+
+	AActor* GetCurrentTargetActor() { return CurrentTargetActor; }
 };
