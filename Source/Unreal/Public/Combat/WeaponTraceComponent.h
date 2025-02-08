@@ -19,8 +19,8 @@ private:
     UPROPERTY(EditAnywhere, Category = "Weapon Trace")
     UParticleSystem* HitParticleTemplate;
 
-    UPROPERTY()
-    class UBoxComponent* WeaponHitbox; // Ensure this is declared
+    UPROPERTY(EditAnywhere, Category = "Weapon Trace")
+    class UBoxComponent* WeaponHitbox;
 
 public:
     UWeaponTraceComponent();
@@ -35,5 +35,6 @@ public:
     UFUNCTION(BlueprintCallable)
     void StopAttack();
 
+    UFUNCTION(BlueprintCallable)
     void SetWeaponHitBox(UBoxComponent* HitBox);
 };

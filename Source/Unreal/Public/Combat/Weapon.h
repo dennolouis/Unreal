@@ -22,8 +22,11 @@ public:
     UStaticMeshComponent* WeaponMesh;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weapon")
-    UBoxComponent* WeaponHitbox;
+    class UBoxComponent* WeaponHitbox;
 
     UPROPERTY(BlueprintReadWrite, EditAnywhere)
     class UWeaponTraceComponent* WeaponTraceComp;
+
+    UFUNCTION(BlueprintCallable)
+    UBoxComponent* GetWeaponHitbox() const { return WeaponHitbox; }
 };

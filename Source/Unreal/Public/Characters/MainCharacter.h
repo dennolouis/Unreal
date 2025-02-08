@@ -41,8 +41,11 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere)
 	class UPlayerActtionsComponent* PlayerActionsComp;
 
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = "Components")
-	class UChildActorComponent* Sword;
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	TSubclassOf<class AWeapon> WeaponClass;
+
+	UPROPERTY(BlueprintReadWrite)
+	class AWeapon* EquippedWeapon;
 
 
 protected:

@@ -9,6 +9,7 @@
 #include "Combat/CombatComponent.h"
 #include "Combat/TraceComponent.h"
 #include "Combat/BlockComponent.h"
+#include "Combat/Weapon.h"
 #include "Characters/PlayerActtionsComponent.h"
 
 
@@ -24,9 +25,6 @@ AMainCharacter::AMainCharacter()
 	TraceComp = CreateDefaultSubobject<UTraceComponent>(TEXT("Trace Component"));
 	BlockComp = CreateDefaultSubobject<UBlockComponent>(TEXT("Block Component"));
 	PlayerActionsComp = CreateDefaultSubobject<UPlayerActtionsComponent>(TEXT("Player Actions Component"));
-	
-	Sword = CreateDefaultSubobject<UChildActorComponent>(TEXT("Sword"));
-	Sword->SetupAttachment(GetMesh(), TEXT("SwordSocket"));
 }
 
 // Called when the game starts or when spawned
@@ -37,6 +35,18 @@ void AMainCharacter::BeginPlay()
 	PlayerAnim = Cast<UPlayerAnimInstance>
 		(GetMesh()->GetAnimInstance()
 	);
+
+	if (WeaponClass)
+	{
+		// Spawn weapon and attach to hand socket
+		EquippedWeapon = GetWorld()->SpawnActor<AWeapon>(WeaponClass);
+		if (EquippedWeapon)
+		{
+			EquippedWeapon->AttachToComponent(GetMesh(),
+				FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+				TEXT("SwordSocket")); // Change to your actual socket name
+		}
+	}
 }
 
 // Called every frame
