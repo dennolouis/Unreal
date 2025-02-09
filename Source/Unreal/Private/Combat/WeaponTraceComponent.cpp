@@ -28,6 +28,26 @@ void UWeaponTraceComponent::BeginPlay()
 void UWeaponTraceComponent::StartAttack()
 {
     if (!WeaponHitbox) return;
+    
+    bIsAttacking = true;
+    TargetsToIgnore.Empty();
+}
+
+// StopAttack: Reset hit tracking
+void UWeaponTraceComponent::StopAttack()
+{
+    bIsAttacking = false;
+    TargetsToIgnore.Empty();
+}
+
+void UWeaponTraceComponent::SetWeaponHitBox(UBoxComponent* HitBox)
+{
+    WeaponHitbox = HitBox;
+}
+
+void UWeaponTraceComponent::HandleTrace()
+{
+    if (!WeaponHitbox || !bIsAttacking) return;
 
     FVector BoxExtent = WeaponHitbox->GetScaledBoxExtent();
     FVector Start = WeaponHitbox->GetComponentLocation();
@@ -38,15 +58,16 @@ void UWeaponTraceComponent::StartAttack()
     FCollisionQueryParams QueryParams;
     QueryParams.AddIgnoredActors(TargetsToIgnore);
     QueryParams.AddIgnoredActor(GetOwner());
+    QueryParams.AddIgnoredActor(ActorToIgnore);
 
     bool bHit = GetWorld()->SweepMultiByChannel(
-        OutHits, Start, End, FQuat::Identity, ECC_Pawn, Box, QueryParams
+        OutHits, Start, End, WeaponHitbox->GetComponentQuat(), ECC_Pawn, Box, QueryParams
     );
 
     if (bDebugMode)
     {
         FColor DebugColor = bHit ? FColor::Green : FColor::Red;
-        DrawDebugBox(GetWorld(), Start, BoxExtent, DebugColor, false, 1.0f, 0, 2.0f);
+        DrawDebugBox(GetWorld(), Start, BoxExtent, WeaponHitbox->GetComponentQuat(), DebugColor, false, 1.0f, 0, 2.0f);
     }
 
     for (const FHitResult& Hit : OutHits)
@@ -63,15 +84,4 @@ void UWeaponTraceComponent::StartAttack()
             UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitParticleTemplate, Hit.ImpactPoint);
         }
     }
-}
-
-// StopAttack: Reset hit tracking
-void UWeaponTraceComponent::StopAttack()
-{
-    TargetsToIgnore.Empty();
-}
-
-void UWeaponTraceComponent::SetWeaponHitBox(UBoxComponent* HitBox)
-{
-    WeaponHitbox = HitBox;
 }

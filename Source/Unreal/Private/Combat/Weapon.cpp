@@ -13,7 +13,7 @@ AWeapon::AWeapon()
     WeaponHitbox = CreateDefaultSubobject<UBoxComponent>(TEXT("WeaponHitbox"));
     WeaponHitbox->SetupAttachment(RootComponent);
 
-    WeaponTraceComp = CreateDefaultSubobject<UWeaponTraceComponent>(TEXT("Trace Component"));
+    WeaponTraceComp = CreateDefaultSubobject<UWeaponTraceComponent>(TEXT("Weapon Trace Component"));
     WeaponTraceComp->SetWeaponHitBox(WeaponHitbox);
 }
 

@@ -13,14 +13,19 @@ private:
     UPROPERTY(EditAnywhere, Category = "Weapon Trace")
     TArray<AActor*> TargetsToIgnore;
 
+    AActor* ActorToIgnore;
+
     UPROPERTY(EditAnywhere, Category = "Weapon Trace")
     bool bDebugMode = false;
 
     UPROPERTY(EditAnywhere, Category = "Weapon Trace")
     UParticleSystem* HitParticleTemplate;
 
-    UPROPERTY(EditAnywhere, Category = "Weapon Trace")
+    UPROPERTY(VisibleAnywhere)
     class UBoxComponent* WeaponHitbox;
+
+    UPROPERTY(VisibleAnywhere)
+    bool bIsAttacking{ false };
 
 public:
     UWeaponTraceComponent();
@@ -37,4 +42,9 @@ public:
 
     UFUNCTION(BlueprintCallable)
     void SetWeaponHitBox(UBoxComponent* HitBox);
+
+    UFUNCTION(BlueprintCallable)
+    void HandleTrace();
+
+    void SetActorToIgnore(AActor* Ignore) { ActorToIgnore = Ignore; };
 };

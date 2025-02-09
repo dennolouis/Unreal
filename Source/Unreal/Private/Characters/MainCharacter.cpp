@@ -10,6 +10,7 @@
 #include "Combat/TraceComponent.h"
 #include "Combat/BlockComponent.h"
 #include "Combat/Weapon.h"
+#include "Combat/WeaponTraceComponent.h"
 #include "Characters/PlayerActtionsComponent.h"
 
 
@@ -45,6 +46,8 @@ void AMainCharacter::BeginPlay()
 			EquippedWeapon->AttachToComponent(GetMesh(),
 				FAttachmentTransformRules::SnapToTargetNotIncludingScale,
 				TEXT("SwordSocket")); // Change to your actual socket name
+
+			EquippedWeapon->WeaponTraceComp->SetActorToIgnore(this);
 		}
 	}
 }
