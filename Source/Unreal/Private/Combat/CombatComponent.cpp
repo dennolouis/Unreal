@@ -93,10 +93,6 @@ void UCombatComponent::HeavyAttack()
 
 	bCanAttack = false;
 
-	// Determine if the player is moving or standing still
-	FVector Velocity = CharacterRef->GetVelocity();
-	bool bIsMoving = !Velocity.IsNearlyZero();
-
 	// Play the appropriate animation based on movement state
 	UAnimMontage* SelectedAnimation = bIsMoving ? MovingHeavyAttackAnimation : StandingHeavyAttackAnimation;
 	float AttackAnimDuration = CharacterRef->PlayAnimMontage(SelectedAnimation);

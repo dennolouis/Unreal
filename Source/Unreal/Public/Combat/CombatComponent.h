@@ -38,6 +38,9 @@ class UNREAL_API UCombatComponent : public UActorComponent
 	UPROPERTY(VisibleAnywhere)
 	bool bCanAttack{ true };
 
+	UPROPERTY(VisibleAnywhere)
+	bool bIsMoving{ false };
+
 	UPROPERTY(EditAnywhere)
 	float StaminaCost{5.0f};
 
@@ -79,5 +82,8 @@ public:
 	void StopAttackAnimation();
 
 	UFUNCTION()
-	void RandomAttack();		
+	void RandomAttack();
+
+	UFUNCTION(BlueprintCallable)
+	void SetIsMoving(bool value) { bIsMoving = value; }
 };

@@ -42,10 +42,22 @@ public:
 	class UPlayerActtionsComponent* PlayerActionsComp;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
-	TSubclassOf<class AWeapon> WeaponClass;
+	TSubclassOf<class AWeapon> PrimaryWeaponClass;
 
 	UPROPERTY(BlueprintReadWrite)
-	class AWeapon* EquippedWeapon;
+	class AWeapon* PrimaryEquippedWeapon;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	TSubclassOf<class AWeapon> SecondaryWeaponClass;
+
+	UPROPERTY(BlueprintReadWrite)
+	class AWeapon* SecondaryEquippedWeapon;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	FName PrimaryWeaponSocket;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	FName SecondaryWeaponSocket;
 
 
 protected:

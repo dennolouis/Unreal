@@ -33,7 +33,7 @@ void AEnemyProjectile::HandleBeginOverLapEvent(AActor* OtherActor)
 {
 	APawn* PawnRef{ Cast<APawn>(OtherActor) };
 
-	if (!PawnRef->IsPlayerControlled()) { return; }
+	if (!PawnRef || !PawnRef->IsPlayerControlled()) { return; }
 
 	FindComponentByClass<UParticleSystemComponent>()
 		->SetTemplate(HitTemplate);

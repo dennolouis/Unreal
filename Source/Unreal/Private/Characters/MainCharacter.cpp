@@ -37,17 +37,31 @@ void AMainCharacter::BeginPlay()
 		(GetMesh()->GetAnimInstance()
 	);
 
-	if (WeaponClass)
+	if (PrimaryWeaponClass)
 	{
 		// Spawn weapon and attach to hand socket
-		EquippedWeapon = GetWorld()->SpawnActor<AWeapon>(WeaponClass);
-		if (EquippedWeapon)
+		PrimaryEquippedWeapon = GetWorld()->SpawnActor<AWeapon>(PrimaryWeaponClass);
+		if (PrimaryEquippedWeapon)
 		{
-			EquippedWeapon->AttachToComponent(GetMesh(),
+			PrimaryEquippedWeapon->AttachToComponent(GetMesh(),
 				FAttachmentTransformRules::SnapToTargetNotIncludingScale,
-				TEXT("SwordSocket")); // Change to your actual socket name
+				PrimaryWeaponSocket); // Change to your actual socket name
 
-			EquippedWeapon->WeaponTraceComp->SetActorToIgnore(this);
+			PrimaryEquippedWeapon->WeaponTraceComp->SetActorToIgnore(this);
+		}
+	}
+
+	if (SecondaryWeaponClass)
+	{
+		// Spawn weapon and attach to hand socket
+		SecondaryEquippedWeapon = GetWorld()->SpawnActor<AWeapon>(SecondaryWeaponClass);
+		if (PrimaryEquippedWeapon)
+		{
+			SecondaryEquippedWeapon->AttachToComponent(GetMesh(),
+				FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+				SecondaryWeaponSocket); // Change to your actual socket name
+
+			SecondaryEquippedWeapon->WeaponTraceComp->SetActorToIgnore(this);
 		}
 	}
 }
