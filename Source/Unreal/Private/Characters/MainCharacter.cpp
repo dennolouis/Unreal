@@ -147,3 +147,29 @@ void AMainCharacter::TryToStopAnimation()
 	}
 }
 
+void AMainCharacter::StartSwordAttack()
+{
+	if (PrimaryEquippedWeapon)
+	{
+		PrimaryEquippedWeapon->WeaponTraceComp->StartAttack();
+	}
+
+	if (SecondaryEquippedWeapon)
+	{
+		SecondaryEquippedWeapon->WeaponTraceComp->StartAttack();
+	}
+}
+
+void AMainCharacter::StopSwordAttack()
+{
+	if (PrimaryEquippedWeapon)
+	{
+		PrimaryEquippedWeapon->WeaponTraceComp->StopAttack();
+	}
+
+	if (SecondaryEquippedWeapon)
+	{
+		SecondaryEquippedWeapon->WeaponTraceComp->StopAttack();
+	}
+}
+

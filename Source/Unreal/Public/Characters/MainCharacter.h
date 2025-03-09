@@ -93,4 +93,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void TryToStopAnimation();
+
+	UFUNCTION(BlueprintCallable)
+	void StartSwordAttack();
+
+	UFUNCTION(BlueprintCallable)
+	void StopSwordAttack();
 };
