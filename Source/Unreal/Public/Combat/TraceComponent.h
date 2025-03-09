@@ -44,6 +44,12 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void HandleResetAttack();
 
+	UFUNCTION(BlueprintCallable)
+	void StartAttack() { bIsAttacking = true; }
+
+	UFUNCTION(BlueprintCallable)
+	void EndAttack() { bIsAttacking = false; HandleResetAttack(); }
+
 	UPROPERTY(VisibleAnywhere)
 	bool bIsAttacking{ false };
 
