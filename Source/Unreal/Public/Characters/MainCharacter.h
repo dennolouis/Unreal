@@ -91,4 +91,6 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void CustomJump();
 
+	UFUNCTION(BlueprintCallable)
+	void TryToStopAnimation();
 };

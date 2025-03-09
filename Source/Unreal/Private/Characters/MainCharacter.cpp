@@ -136,3 +136,14 @@ void AMainCharacter::CustomJump()
 	Super::Jump();
 }
 
+void AMainCharacter::TryToStopAnimation()
+{
+	if (!CombatComp || !PlayerActionsComp) return;
+
+	if (CombatComp->CanInterruptAnimation() && !PlayerActionsComp->bIsRollActive)
+	{
+		StopAnimMontage();
+		CombatComp->ResetComboCounter();
+	}
+}
+

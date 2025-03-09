@@ -86,4 +86,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetIsMoving(bool value) { bIsMoving = value; }
+
+	UFUNCTION(BlueprintCallable, BlueprintPure)
+	bool CanInterruptAnimation() const { return bCanAttack; }
 };
