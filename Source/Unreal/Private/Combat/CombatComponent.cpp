@@ -53,10 +53,7 @@ void UCombatComponent::ComboAttack()
 	ULockOnComponent* LockOnComp = CharacterRef->FindComponentByClass<ULockOnComponent>();
 	if (LockOnComp && LockOnComp->GetCurrentTargetActor())
 	{
-		AActor* TargetActor = LockOnComp->GetCurrentTargetActor();
-		FRotator LookAtRotation = (TargetActor->GetActorLocation() - CharacterRef->GetActorLocation()).Rotation();
-		LookAtRotation.Pitch = 0.0f; // Keep rotation horizontal
-		CharacterRef->SetActorRotation(LookAtRotation);
+		LockOnComp->FaceCurrentTargetForOneFrame();
 	}
 
 	bCanAttack = false;

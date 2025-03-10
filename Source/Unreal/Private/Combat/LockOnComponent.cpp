@@ -85,6 +85,23 @@ void ULockOnComponent::EndLockOn()
 
 }
 
+void ULockOnComponent::FaceCurrentTargetForOneFrame()
+{
+	if (!IsValid(CurrentTargetActor) || !IsValid(OwnerRef) || !IsValid(Controller)) return;
+
+	FVector CurrentLocation = OwnerRef->GetActorLocation();
+	FVector TargetLocation = CurrentTargetActor->GetActorLocation();
+
+	TargetLocation.Z -= 125; // Adjust camera look direction slightly downward
+
+	// Find rotation towards the target
+	FRotator NewRotation = UKismetMathLibrary::FindLookAtRotation(CurrentLocation, TargetLocation);
+
+	// Apply rotation only for one frame
+	OwnerRef->SetActorRotation(FRotator(0.0f, NewRotation.Yaw, 0.0f)); // Keep character upright
+
+}
+
 void ULockOnComponent::ToggleLockOn(float Radius)
 {
 	if (IsValid(CurrentTargetActor)) 

@@ -17,7 +17,7 @@ class UNREAL_API AMainCharacter : public ACharacter, public IMainplayer, public 
 	UAnimMontage* DeathAnimMontage;
 
 	UPROPERTY(EditAnywhere)
-	UAnimMontage* HurtAnimMontage;
+	TArray<UAnimMontage*> HurtAnimMontages;
 
 public:
 	// Sets default values for this character's properties
@@ -99,4 +99,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void StopSwordAttack();
+
+	UFUNCTION(BlueprintCallable)
+	bool IsPlayingHurtAnimation() const;
 };

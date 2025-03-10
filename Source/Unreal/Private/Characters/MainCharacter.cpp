@@ -117,7 +117,11 @@ bool AMainCharacter::CanTakeDamage(AActor* Opponent)
 
 void AMainCharacter::PlayHurtAnim(TSubclassOf<class UCameraShakeBase> CameraShakeTemplate)
 {
-	PlayAnimMontage(HurtAnimMontage);
+	int RandomIndex{
+		FMath::RandRange(0, HurtAnimMontages.Num() - 1)
+	};
+
+	PlayAnimMontage(HurtAnimMontages[RandomIndex]);
 
 	if (CameraShakeTemplate)
 	{
@@ -140,7 +144,7 @@ void AMainCharacter::TryToStopAnimation()
 {
 	if (!CombatComp || !PlayerActionsComp) return;
 
-	if (CombatComp->CanInterruptAnimation() && !PlayerActionsComp->bIsRollActive)
+	if (CombatComp->CanInterruptAnimation() && !PlayerActionsComp->bIsRollActive && !IsPlayingHurtAnimation())
 	{
 		StopAnimMontage();
 		CombatComp->ResetComboCounter();
@@ -171,5 +175,16 @@ void AMainCharacter::StopSwordAttack()
 	{
 		SecondaryEquippedWeapon->WeaponTraceComp->StopAttack();
 	}
+}
+
+bool AMainCharacter::IsPlayingHurtAnimation() const
+{
+	if (!GetMesh() || !GetMesh()->GetAnimInstance()) return false;
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	UAnimMontage* CurrentMontage = AnimInstance->GetCurrentActiveMontage();
+
+	// Check if the current montage is in the HurtAnimMontages array
+	return HurtAnimMontages.Contains(CurrentMontage);
 }
 

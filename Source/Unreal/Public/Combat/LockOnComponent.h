@@ -56,5 +56,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void EndLockOn();
 
+	UFUNCTION(BlueprintCallable)
+	void FaceCurrentTargetForOneFrame();
+
 	AActor* GetCurrentTargetActor() { return CurrentTargetActor; }
+	
 };
