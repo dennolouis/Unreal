@@ -12,6 +12,7 @@
 #include "Combat/Weapon.h"
 #include "Combat/WeaponTraceComponent.h"
 #include "Characters/PlayerActtionsComponent.h"
+#include <Kismet/KismetMathLibrary.h>
 
 
 // Sets default values
@@ -115,8 +116,21 @@ bool AMainCharacter::CanTakeDamage(AActor* Opponent)
 	return true;
 }
 
-void AMainCharacter::PlayHurtAnim(TSubclassOf<class UCameraShakeBase> CameraShakeTemplate)
+void AMainCharacter::PlayHurtAnim(AActor* Attacker, TSubclassOf<class UCameraShakeBase> CameraShakeTemplate)
 {
+	if (Attacker)
+	{
+		// Get attacker and player positions
+		FVector PlayerLocation = GetActorLocation();
+		FVector AttackerLocation = Attacker->GetActorLocation();
+
+		// Calculate rotation to face the attacker
+		FRotator LookAtRotation = UKismetMathLibrary::FindLookAtRotation(PlayerLocation, AttackerLocation);
+
+		// Apply rotation (only Yaw to prevent tilting)
+		SetActorRotation(FRotator(0.0f, LookAtRotation.Yaw, 0.0f));
+	}
+
 	int RandomIndex{
 		FMath::RandRange(0, HurtAnimMontages.Num() - 1)
 	};

@@ -86,7 +86,7 @@ public:
 	virtual bool CanTakeDamage(AActor* Opponent) override;
 
 	UFUNCTION(BlueprintCallable)
-	void PlayHurtAnim(TSubclassOf<class UCameraShakeBase> CameraShakeTemplate);
+	void PlayHurtAnim(AActor* Attacker, TSubclassOf<class UCameraShakeBase> CameraShakeTemplate);
 
 	UFUNCTION(BlueprintCallable)
 	void CustomJump();
