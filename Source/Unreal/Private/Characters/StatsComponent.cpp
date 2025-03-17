@@ -50,7 +50,8 @@ void UStatsComponent::ReduceHealth(float Amount, AActor* Opponent)
 	);
 	
 	OnHealthPercentUpdateDelegate.Broadcast(
-		GetStatPercentage(EStat::Health, EStat::MaxHealth)
+		GetStatPercentage(EStat::Health, EStat::MaxHealth),
+		Opponent
 	);
 
 	if (Stats[EStat::Health] <= 0) 

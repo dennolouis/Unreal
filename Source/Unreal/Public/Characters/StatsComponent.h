@@ -8,10 +8,11 @@
 #include "StatsComponent.generated.h"
 
 
-DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(
+DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_TwoParams(
 	FOnHealthPercentUpdateSignature,
 	UStatsComponent, OnHealthPercentUpdateDelegate,
-	float, Percentage
+	float, Percentage,
+	AActor*, Opponent
 );
 
 DECLARE_DYNAMIC_MULTICAST_SPARSE_DELEGATE_OneParam(
