@@ -90,6 +90,12 @@ void UCombatComponent::HeavyAttack()
 
 	bCanAttack = false;
 
+	ULockOnComponent* LockOnComp = CharacterRef->FindComponentByClass<ULockOnComponent>();
+	if (LockOnComp && LockOnComp->GetCurrentTargetActor())
+	{
+		LockOnComp->FaceCurrentTargetForOneFrame();
+	}
+
 	// Play the appropriate animation based on movement state
 	UAnimMontage* SelectedAnimation = bIsMoving ? MovingHeavyAttackAnimation : StandingHeavyAttackAnimation;
 	float AttackAnimDuration = CharacterRef->PlayAnimMontage(SelectedAnimation);

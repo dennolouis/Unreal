@@ -36,68 +36,71 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 
 	if (!bIsAttacking) { return; }
 
+	// Get the active trace sockets
+	if (!Sockets.Contains(CurrentAttack)) { return; }
+
+	FTraceSockets Socket = Sockets[CurrentAttack];
+
 	TArray<FHitResult> AllResults;
 
-	for (const FTraceSockets Socket: Sockets) {
-		FVector StartSocketLocation{ 
-			SkeletalComp->GetSocketLocation(Socket.Start) 
-		};
-		FVector EndSocketLocation{ 
-			SkeletalComp->GetSocketLocation(Socket.End) 
-		};
-		FQuat ShapeRotation{ 
-			SkeletalComp->GetSocketQuaternion(Socket.Rotation) 
+	FVector StartSocketLocation{ 
+		SkeletalComp->GetSocketLocation(Socket.Start) 
+	};
+	FVector EndSocketLocation{ 
+		SkeletalComp->GetSocketLocation(Socket.End) 
+	};
+	FQuat ShapeRotation{ 
+		SkeletalComp->GetSocketQuaternion(Socket.Rotation) 
+	};
+
+	TArray<FHitResult> OutResults;
+	double WeaponDistance{
+		FVector::Distance(StartSocketLocation, EndSocketLocation)
+	};
+	FVector BoxHalfExtent{
+		BoxCollisionLength, BoxCollisionLength, WeaponDistance
+	};
+	BoxHalfExtent /= 2; // BoxHalfExtent = BoxHalfExtent / 2;
+	FCollisionShape Box{
+		FCollisionShape::MakeBox(BoxHalfExtent)
+	};
+	FCollisionQueryParams IgnoreParams{
+		FName { TEXT("Ignore Params") },
+		false,
+		GetOwner()
+	};
+
+	bool bHasFoundTargets{ GetWorld()->SweepMultiByChannel(
+		OutResults,
+		StartSocketLocation,
+		EndSocketLocation,
+		ShapeRotation,
+		ECollisionChannel::ECC_GameTraceChannel1,
+		Box,
+		IgnoreParams
+	) };
+
+	for (FHitResult Hit: OutResults) {
+		AllResults.Add(Hit);
+	}
+
+	if (bDebugMode)
+	{
+		FVector CenterPoint{
+			UKismetMathLibrary::VLerp(
+				StartSocketLocation, EndSocketLocation, 0.5f
+			)
 		};
 
-		TArray<FHitResult> OutResults;
-		double WeaponDistance{
-			FVector::Distance(StartSocketLocation, EndSocketLocation)
-		};
-		FVector BoxHalfExtent{
-			BoxCollisionLength, BoxCollisionLength, WeaponDistance
-		};
-		BoxHalfExtent /= 2; // BoxHalfExtent = BoxHalfExtent / 2;
-		FCollisionShape Box{
-			FCollisionShape::MakeBox(BoxHalfExtent)
-		};
-		FCollisionQueryParams IgnoreParams{
-			FName { TEXT("Ignore Params") },
-			false,
-			GetOwner()
-		};
-
-		bool bHasFoundTargets{ GetWorld()->SweepMultiByChannel(
-			OutResults,
-			StartSocketLocation,
-			EndSocketLocation,
-			ShapeRotation,
-			ECollisionChannel::ECC_GameTraceChannel1,
-			Box,
-			IgnoreParams
-		) };
-
-		for (FHitResult Hit: OutResults) {
-			AllResults.Add(Hit);
-		}
-
-		if (bDebugMode)
-		{
-			FVector CenterPoint{
-				UKismetMathLibrary::VLerp(
-					StartSocketLocation, EndSocketLocation, 0.5f
-				)
-			};
-
-			UKismetSystemLibrary::DrawDebugBox(
-				GetWorld(),
-				CenterPoint,
-				Box.GetExtent(),
-				bHasFoundTargets ? FLinearColor::Green : FLinearColor::Red,
-				ShapeRotation.Rotator(),
-				1.0f,
-				2.0f
-			);
-		}
+		UKismetSystemLibrary::DrawDebugBox(
+			GetWorld(),
+			CenterPoint,
+			Box.GetExtent(),
+			bHasFoundTargets ? FLinearColor::Green : FLinearColor::Red,
+			ShapeRotation.Rotator(),
+			1.0f,
+			2.0f
+		);
 	}
 
 	if (AllResults.Num() == 0) { return; }
@@ -140,6 +143,14 @@ void UTraceComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 void UTraceComponent::HandleResetAttack()
 {
 	TargetsToIgnore.Empty();
+}
+
+void UTraceComponent::StartAttack(EAttackType AttackType)
+{
+	if (!Sockets.Contains(AttackType)) { return; }
+
+	CurrentAttack = AttackType;
+	bIsAttacking = true;
 }
 
 

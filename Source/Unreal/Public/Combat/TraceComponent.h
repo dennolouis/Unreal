@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Combat/FTraceSockets.h"
+#include "Combat/EAttackType.h"
 #include "TraceComponent.generated.h"
 
 
@@ -16,7 +17,8 @@ class UNREAL_API UTraceComponent : public UActorComponent
 	USkeletalMeshComponent* SkeletalComp;
 
 	UPROPERTY(EditAnywhere)
-	TArray<FTraceSockets> Sockets;
+	//TArray<FTraceSockets> Sockets;
+	TMap<TEnumAsByte<EAttackType>, FTraceSockets> Sockets;
 
 	UPROPERTY(EditAnywhere)
 	double BoxCollisionLength{ 30.0 };
@@ -28,6 +30,8 @@ class UNREAL_API UTraceComponent : public UActorComponent
 
 	UPROPERTY(EditAnywhere)
 	UParticleSystem* HitParticleTemplate;
+
+	EAttackType CurrentAttack;
 
 public:	
 	// Sets default values for this component's properties
@@ -45,7 +49,7 @@ public:
 	void HandleResetAttack();
 
 	UFUNCTION(BlueprintCallable)
-	void StartAttack() { bIsAttacking = true; }
+	void StartAttack(EAttackType AttackType);
 
 	UFUNCTION(BlueprintCallable)
 	void EndAttack() { bIsAttacking = false; HandleResetAttack(); }
