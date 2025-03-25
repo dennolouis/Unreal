@@ -95,7 +95,7 @@ public:
 	void TryToStopAnimation();
 
 	UFUNCTION(BlueprintCallable)
-	void StartSwordAttack();
+	void StartSwordAttack(bool PrimeWeapon, float AttackMultiplier);
 
 	UFUNCTION(BlueprintCallable)
 	void StopSwordAttack();

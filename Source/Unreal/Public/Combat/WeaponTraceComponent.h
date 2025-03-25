@@ -27,6 +27,9 @@ private:
     UPROPERTY(VisibleAnywhere)
     bool bIsAttacking{ false };
 
+    float WeaponStrength{ 10.0f };
+    float HitMultiplier{ 1.0f };
+
 public:
     UWeaponTraceComponent();
 
@@ -46,5 +49,10 @@ public:
     UFUNCTION(BlueprintCallable)
     void HandleTrace();
 
+    UFUNCTION(BlueprintCallable)
+    void SetHitMultiplier(float Multipler) { HitMultiplier = Multipler; }
+
     void SetActorToIgnore(AActor* Ignore) { ActorToIgnore = Ignore; };
+    void SetWeaponStrength(float Strength) { WeaponStrength = Strength; }
+
 };

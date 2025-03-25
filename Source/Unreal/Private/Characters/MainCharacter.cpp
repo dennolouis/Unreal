@@ -38,6 +38,13 @@ void AMainCharacter::BeginPlay()
 		(GetMesh()->GetAnimInstance()
 	);
 
+	float WeaponStrength{ 10.0f };
+
+	if (StatsComp && StatsComp->Stats.Contains(EStat::Strength))
+	{
+		WeaponStrength = StatsComp->Stats[EStat::Strength];
+	}
+
 	if (PrimaryWeaponClass)
 	{
 		// Spawn weapon and attach to hand socket
@@ -49,6 +56,7 @@ void AMainCharacter::BeginPlay()
 				PrimaryWeaponSocket); // Change to your actual socket name
 
 			PrimaryEquippedWeapon->WeaponTraceComp->SetActorToIgnore(this);
+			PrimaryEquippedWeapon->WeaponTraceComp->SetWeaponStrength(WeaponStrength);
 		}
 	}
 
@@ -63,6 +71,7 @@ void AMainCharacter::BeginPlay()
 				SecondaryWeaponSocket); // Change to your actual socket name
 
 			SecondaryEquippedWeapon->WeaponTraceComp->SetActorToIgnore(this);
+			SecondaryEquippedWeapon->WeaponTraceComp->SetWeaponStrength(WeaponStrength);
 		}
 	}
 }
@@ -165,15 +174,17 @@ void AMainCharacter::TryToStopAnimation()
 	}
 }
 
-void AMainCharacter::StartSwordAttack()
+void AMainCharacter::StartSwordAttack(bool PrimeWeapon, float AttackMultipler)
 {
-	if (PrimaryEquippedWeapon)
+	if (PrimeWeapon && PrimaryEquippedWeapon)
 	{
+		PrimaryEquippedWeapon->WeaponTraceComp->SetHitMultiplier(AttackMultipler);
 		PrimaryEquippedWeapon->WeaponTraceComp->StartAttack();
 	}
 
-	if (SecondaryEquippedWeapon)
+	else if (SecondaryEquippedWeapon)
 	{
+		SecondaryEquippedWeapon->WeaponTraceComp->SetHitMultiplier(AttackMultipler);
 		SecondaryEquippedWeapon->WeaponTraceComp->StartAttack();
 	}
 }

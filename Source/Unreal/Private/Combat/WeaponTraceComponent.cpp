@@ -76,7 +76,7 @@ void UWeaponTraceComponent::HandleTrace()
         if (!HitActor || TargetsToIgnore.Contains(HitActor)) continue;
 
         FDamageEvent DamageEvent; // Proper instantiation
-        HitActor->TakeDamage(10.0f, DamageEvent, GetOwner()->GetInstigatorController(), GetOwner());
+        HitActor->TakeDamage(WeaponStrength * HitMultiplier, DamageEvent, GetOwner()->GetInstigatorController(), GetOwner());
         TargetsToIgnore.AddUnique(HitActor);
 
         if (HitParticleTemplate)
