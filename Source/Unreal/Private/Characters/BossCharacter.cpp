@@ -10,6 +10,7 @@
 #include "BrainComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "Interfaces/Mainplayer.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values
 ABossCharacter::ABossCharacter()
@@ -42,7 +43,6 @@ void ABossCharacter::BeginPlay()
 		->StatsComp
 		->OnZeroHealthDelegate.
 		AddDynamic(this, &ABossCharacter::HandlePlayerDeath);
-
 }
 
 // Called every frame

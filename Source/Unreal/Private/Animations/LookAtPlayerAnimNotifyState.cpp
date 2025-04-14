@@ -25,7 +25,7 @@ void ULookAtPlayerAnimNotifyState::NotifyEnd(USkeletalMeshComponent* MeshComp, U
 
 	if (!IsValid(OwnerRef)) { return; }
 
-	ULookAtPlayerComponent* RotationComp{
+	ULookAtPlayerComponent* RotationComp{	
 		OwnerRef->FindComponentByClass<ULookAtPlayerComponent>()
 	};
 
