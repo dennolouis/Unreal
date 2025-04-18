@@ -34,6 +34,24 @@ public:
 	UPROPERTY(EditAnywhere, BLueprintReadWrite)
 	class UCombatComponent* CombatComp;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	TSubclassOf<class AWeapon> PrimaryWeaponClass;
+
+	UPROPERTY(BlueprintReadWrite)
+	class AWeapon* PrimaryEquippedWeapon;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	TSubclassOf<class AWeapon> SecondaryWeaponClass;
+
+	UPROPERTY(BlueprintReadWrite)
+	class AWeapon* SecondaryEquippedWeapon;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	FName PrimaryWeaponSocket;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
+	FName SecondaryWeaponSocket;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -64,6 +82,12 @@ public:
 
 	UFUNCTION()
 	void FinishDeathAnim();
+
+	UFUNCTION(BlueprintCallable)
+	void StartSwordAttack(bool PrimeWeapon, float AttackMultiplier);
+
+	UFUNCTION(BlueprintCallable)
+	void StopSwordAttack();
 };
 
 

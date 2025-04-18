@@ -6,6 +6,8 @@
 #include "AIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Combat/CombatComponent.h"
+#include "Combat/Weapon.h"
+#include "Combat/WeaponTraceComponent.h"
 #include "Characters/MainCharacter.h"
 #include "BrainComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -43,6 +45,43 @@ void ABossCharacter::BeginPlay()
 		->StatsComp
 		->OnZeroHealthDelegate.
 		AddDynamic(this, &ABossCharacter::HandlePlayerDeath);
+
+	float WeaponStrength{ 10.0f };
+
+	if (StatsComp && StatsComp->Stats.Contains(EStat::Strength))
+	{
+		WeaponStrength = StatsComp->Stats[EStat::Strength];
+	}
+
+	if (PrimaryWeaponClass)
+	{
+		// Spawn weapon and attach to hand socket
+		PrimaryEquippedWeapon = GetWorld()->SpawnActor<AWeapon>(PrimaryWeaponClass);
+		if (PrimaryEquippedWeapon)
+		{
+			PrimaryEquippedWeapon->AttachToComponent(GetMesh(),
+				FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+				PrimaryWeaponSocket); // Change to your actual socket name
+
+			PrimaryEquippedWeapon->WeaponTraceComp->SetActorToIgnore(this);
+			PrimaryEquippedWeapon->WeaponTraceComp->SetWeaponStrength(WeaponStrength);
+		}
+	}
+
+	if (SecondaryWeaponClass)
+	{
+		// Spawn weapon and attach to hand socket
+		SecondaryEquippedWeapon = GetWorld()->SpawnActor<AWeapon>(SecondaryWeaponClass);
+		if (PrimaryEquippedWeapon)
+		{
+			SecondaryEquippedWeapon->AttachToComponent(GetMesh(),
+				FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+				SecondaryWeaponSocket); // Change to your actual socket name
+
+			SecondaryEquippedWeapon->WeaponTraceComp->SetActorToIgnore(this);
+			SecondaryEquippedWeapon->WeaponTraceComp->SetWeaponStrength(WeaponStrength);
+		}
+	}
 }
 
 // Called every frame
@@ -133,6 +172,40 @@ void ABossCharacter::HandleDeath()
 
 void ABossCharacter::FinishDeathAnim()
 {
+	if (PrimaryEquippedWeapon)
+		PrimaryEquippedWeapon->Destroy();
+
+	if (SecondaryEquippedWeapon)
+		SecondaryEquippedWeapon->Destroy();
+
 	Destroy();
+}
+
+void ABossCharacter::StartSwordAttack(bool PrimeWeapon, float AttackMultipler)
+{
+	if (PrimeWeapon && PrimaryEquippedWeapon)
+	{
+		PrimaryEquippedWeapon->WeaponTraceComp->SetHitMultiplier(AttackMultipler);
+		PrimaryEquippedWeapon->WeaponTraceComp->StartAttack();
+	}
+
+	else if (SecondaryEquippedWeapon)
+	{
+		SecondaryEquippedWeapon->WeaponTraceComp->SetHitMultiplier(AttackMultipler);
+		SecondaryEquippedWeapon->WeaponTraceComp->StartAttack();
+	}
+}
+
+void ABossCharacter::StopSwordAttack()
+{
+	if (PrimaryEquippedWeapon)
+	{
+		PrimaryEquippedWeapon->WeaponTraceComp->StopAttack();
+	}
+
+	if (SecondaryEquippedWeapon)
+	{
+		SecondaryEquippedWeapon->WeaponTraceComp->StopAttack();
+	}
 }
 
