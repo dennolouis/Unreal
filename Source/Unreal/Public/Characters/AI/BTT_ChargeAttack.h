@@ -16,7 +16,10 @@ class UNREAL_API UBTT_ChargeAttack : public UBTTaskNode
 
 	AAIController* ControllerRef;
 	ACharacter* CharacterRef;
+	UBehaviorTreeComponent* OwnerCompRef;
 	class UBossAnimInstance* BossAnimRef;
+	class UBlackboardComponent* BlackboardCompRef;
+
 
 	UPROPERTY(EditAnywhere)
 	float AcceptableRadius{ 100.0f };

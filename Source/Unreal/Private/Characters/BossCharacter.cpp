@@ -7,6 +7,7 @@
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Combat/CombatComponent.h"
 #include "Combat/Weapon.h"
+#include "Combat/TraceComponent.h"
 #include "Combat/WeaponTraceComponent.h"
 #include "Characters/MainCharacter.h"
 #include "BrainComponent.h"
@@ -22,6 +23,7 @@ ABossCharacter::ABossCharacter()
 
 	StatsComp = CreateDefaultSubobject<UStatsComponent>(TEXT("Stats Componet"));
 	CombatComp = CreateDefaultSubobject<UCombatComponent>(TEXT("Combat Componet"));
+	TraceComp = CreateDefaultSubobject<UTraceComponent>(TEXT("Trace Component"));
 
 }
 

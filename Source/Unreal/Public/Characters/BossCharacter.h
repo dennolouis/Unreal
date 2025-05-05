@@ -34,6 +34,9 @@ public:
 	UPROPERTY(EditAnywhere, BLueprintReadWrite)
 	class UCombatComponent* CombatComp;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere)
+	class UTraceComponent* TraceComp;
+
 	UPROPERTY(EditDefaultsOnly, Category = "Weapon")
 	TSubclassOf<class AWeapon> PrimaryWeaponClass;
 

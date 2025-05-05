@@ -26,17 +26,14 @@ void UBTT_ChargeAttack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		ChargeAtPlayer();
 	}
 
+	if (bIsFinished)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[Boss] Finishing Attack..."));
+	}
 	if (!bIsFinished) { return; }
 
-	OwnerComp.GetBlackboardComponent()->SetValueAsEnum(
-		TEXT("CurrentState"), EEnemyState::Melee
-	);
 	
 	ControllerRef->ReceiveMoveCompleted.Remove(MoveCompleteDelegated);
-
-	FinishLatentTask(
-		OwnerComp, EBTNodeResult::Succeeded
-	);
 }
 
 UBTT_ChargeAttack::UBTT_ChargeAttack()
@@ -54,6 +51,9 @@ EBTNodeResult::Type UBTT_ChargeAttack::ExecuteTask(UBehaviorTreeComponent& Owner
 	CharacterRef = ControllerRef->GetCharacter();
 	BossAnimRef = Cast<UBossAnimInstance>( CharacterRef->GetMesh()->GetAnimInstance());
 
+	OwnerCompRef = &OwnerComp;
+	BlackboardCompRef = OwnerComp.GetBlackboardComponent();
+
 	BossAnimRef->bIsCharging = true;
 
 	OwnerComp.GetBlackboardComponent()
@@ -68,6 +68,11 @@ EBTNodeResult::Type UBTT_ChargeAttack::ExecuteTask(UBehaviorTreeComponent& Owner
 
 void UBTT_ChargeAttack::ChargeAtPlayer()
 {
+
+	UE_LOG(LogTemp, Warning, TEXT("[Boss Charge] OrientRotationToMovement: %d"), CharacterRef->GetCharacterMovement()->bOrientRotationToMovement);
+	UE_LOG(LogTemp, Warning, TEXT("[Boss Charge] UseControllerRotationYaw: %d"), CharacterRef->bUseControllerRotationYaw);
+	UE_LOG(LogTemp, Warning, TEXT("[Boss Charge] MaxWalkSpeed: %f"), CharacterRef->GetCharacterMovement()->MaxWalkSpeed);
+
 	APawn* PlayerRef{
 		GetWorld()->GetFirstPlayerController()->GetPawn()
 	};
@@ -93,6 +98,12 @@ void UBTT_ChargeAttack::ChargeAtPlayer()
 
 void UBTT_ChargeAttack::HandleMoveCompleted()
 {
+	if (ControllerRef)
+	{
+		ControllerRef->StopMovement();
+		ControllerRef->ClearFocus(EAIFocusPriority::Gameplay);
+	}
+
 	BossAnimRef->bIsCharging = false;
 
 	FTimerHandle AttackTimerHandle;
@@ -111,5 +122,17 @@ void UBTT_ChargeAttack::HandleMoveCompleted()
 
 void UBTT_ChargeAttack::FinishAttackTask()
 {
+	UE_LOG(LogTemp, Warning, TEXT("[Boss] FinishAttackTask CALLED"));
+
 	bIsFinished = true;
+
+	if (BlackboardCompRef)
+	{
+		BlackboardCompRef->SetValueAsEnum(TEXT("CurrentState"), EEnemyState::Melee);
+	}
+
+	if (OwnerCompRef)
+	{
+		FinishLatentTask(*OwnerCompRef, EBTNodeResult::Succeeded);
+	}
 }
