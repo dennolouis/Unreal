@@ -50,6 +50,11 @@ EBTNodeResult::Type UBTT_MeleeAttack::ExecuteTask(UBehaviorTreeComponent& OwnerC
 
 		FTimerHandle AttackTimerHandle;
 
+		if (FighterRef->GetAnimDuration() <= 0.01)
+		{
+			return EBTNodeResult::Succeeded;
+		}
+
 		AIRef->GetCharacter()->GetWorldTimerManager().SetTimer(
 			AttackTimerHandle,
 			this,
